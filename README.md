@@ -14,7 +14,7 @@ This project is a simple Order Management System API built with NestJS and Prism
 1. Clone the repository:
     ```bash
     git clone https://github.com/HazimEmam/OrderManagementSystem-Task.git
-    cd ecommerce-api
+    cd OrderManagementSystem-Task
     ```
 
 2. Install dependencies:
@@ -41,7 +41,7 @@ This project is a simple Order Management System API built with NestJS and Prism
     npm run start Or yarn start:dev
     ```
 
-2. Open your browser and navigate to `https://bitly.cx/lJV8W` to view Postman documentation.
+2. Open your browser and navigate to `https://bitly.cx/WQj0` to view Postman documentation.
 
 ### API Endpoints
 
@@ -110,5 +110,40 @@ This project is a simple Order Management System API built with NestJS and Prism
         {
           "orderId": 1,
           "status": "Shipped"
+        }
+        ```
+#### Users
+
+- **Create User**
+    - **Endpoint:** `POST /api/users`
+    - **Description:** Creates a new user.
+    - **Request Body:**
+        ```json
+        {
+          "name": "John Doe",
+          "email": "john.doe@example.com",
+          "password": "password123",
+          "address": "123 Main St"
+        }
+        ```
+
+- **Get User by ID**
+    - **Endpoint:** `GET /api/users/:id`
+    - **Description:** Retrieves a user by ID.
+    - **Path Parameters:**
+        - `id`: The ID of the user
+
+#### Products
+
+- **Add Product**
+    - **Endpoint:** `POST /api/products`
+    - **Description:** Adds a new product.
+    - **Request Body:**
+        ```json
+        {
+          "name": "Product Name",
+          "description": "Product Description",
+          "price": 19.99,
+          "stock": 100
         }
         ```
