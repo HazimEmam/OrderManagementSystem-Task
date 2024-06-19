@@ -22,7 +22,7 @@ export class CartController {
   }
 
   @Delete('remove')
-  async removeFromCart(@Query('userId') userId: number, @Query('productId') productId: number) {
+  async removeFromCart(@Body('userId') userId: number, @Body('productId') productId: number) {
     return this.cartService.removeFromCart(userId, productId);
   }
 

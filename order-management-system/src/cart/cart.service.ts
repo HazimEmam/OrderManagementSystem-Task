@@ -5,96 +5,96 @@ import { CartDto } from 'src/dto/CartDTO';
 
 @Injectable()
 export class CartService {
-  constructor(private readonly databaseServices : DatabaseService){}
+  constructor(private readonly databaseServices: DatabaseService) {}
 
-  async addToCart(data : CartDto){
-    const {userId , productId, quantity} = data
+  async addToCart(data: CartDto) {
+    const { userId, productId, quantity } = data;
     const cart = await this.databaseServices.cart.findUnique({
       where: { userId },
-    })
+    });
 
-    if(cart){
+    if (cart) {
       const productInCart = await this.databaseServices.productXCart.findFirst({
-        where: {cartId:cart.cartId, productId},
-      })
-      if(productInCart){
+        where: { cartId: cart.cartId, productId },
+      });
+      if (productInCart) {
         return this.databaseServices.productXCart.update({
-          where: { id :productInCart.productId},
-          data:{
-            quantity : productInCart.quantity + quantity,
-          }
-        })
-      }else{
+          where: { id: productInCart.productId },
+          data: {
+            quantity: productInCart.quantity + quantity,
+          },
+        });
+      } else {
         return this.databaseServices.productXCart.create({
-          data:{
+          data: {
             cartId: cart.cartId,
             productId,
-            quantity
-          }
-        })
+            quantity,
+          },
+        });
       }
-    }else{
+    } else {
       const newCart = await this.databaseServices.cart.create({
-        data :{userId},
+        data: { userId },
       });
       return this.databaseServices.productXCart.create({
-        data:{
+        data: {
           cartId: newCart.cartId,
           productId,
           quantity,
-        }
-      })
+        },
+      });
     }
   }
 
-  async getCart(userId: number){
+  async getCart(userId: number) {
     return this.databaseServices.cart.findMany({
-      where:{userId},
-      include:{
-        productItem:{
-          include:{
+      where: { userId },
+      include: {
+        productItem: {
+          include: {
             product: true,
-          }
-        }
-      }
-    })
+          },
+        },
+      },
+    });
   }
-  async updateCart(data : CartDto){
-    const {userId , productId , quantity} = data;
+  async updateCart(data: CartDto) {
+    const { userId, productId, quantity } = data;
     const cart = await this.databaseServices.cart.findFirst({
-      where: {userId},
-    })
+      where: { userId },
+    });
 
-    if(cart){
+    if (cart) {
       const productInCart = await this.databaseServices.productXCart.findFirst({
-        where:{productId}
-      })
-      if(productInCart){
+        where: { productId },
+      });
+      if (productInCart) {
         return this.databaseServices.productXCart.update({
           where: {
             id: productInCart.id,
           },
-          data:{
-            quantity:quantity
-          }
-        })
+          data: {
+            quantity: quantity,
+          },
+        });
       }
     }
     throw new Error('Cart or Product not found');
   }
 
-  async removeFromCart(userId: number , productId: number){
+  async removeFromCart(userId: number, productId: number) {
     const cart = await this.databaseServices.cart.findFirst({
-      where:{userId}
-    })
+      where: { userId },
+    });
 
-    if(cart){
+    if (cart) {
       return this.databaseServices.productXCart.deleteMany({
         where: {
           cartId: cart.cartId,
-          productId
-        }
-      })
+          productId,
+        },
+      });
     }
     throw new Error('Cart not found');
   }
